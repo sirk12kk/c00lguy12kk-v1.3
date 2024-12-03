@@ -1,3 +1,4 @@
+-- Player Functions
 local function banPlayer(playerName)
     local player = game.Players:FindFirstChild(playerName)
     if player then
@@ -69,65 +70,7 @@ local function setPlayerSize(player, size)
     end
 end
 
-local function createBanMenu()
-    local ScreenGui = Instance.new("ScreenGui")
-    local Frame = Instance.new("ScrollingFrame")
-    local TextLabel = Instance.new("TextLabel")
-    local CloseButton = Instance.new("TextButton")
-
-    ScreenGui.Name = "BanMenuGui"
-    ScreenGui.Parent = game.CoreGui
-
-    Frame.Parent = ScreenGui
-    Frame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    Frame.BorderSizePixel = 0
-    Frame.Size = UDim2.new(0, 200, 0, 300)
-    Frame.Position = UDim2.new(0.5, -100, 0.5, -150)
-    Frame.CanvasSize = UDim2.new(0, 0, 2, 0)
-    Frame.ScrollBarThickness = 8
-    Frame.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
-    Frame.ScrollBarImageTransparency = 0.5
-
-    TextLabel.Parent = Frame
-    TextLabel.Text = "Ban Menu"
-    TextLabel.Size = UDim2.new(1, 0, 0, 50)
-    TextLabel.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
-    TextLabel.BorderSizePixel = 0
-    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TextLabel.TextScaled = true
-    TextLabel.Font = Enum.Font.SourceSansBold
-
-    CloseButton.Parent = Frame
-    CloseButton.Text = "X"
-    CloseButton.Size = UDim2.new(0, 30, 0, 30)
-    CloseButton.Position = UDim2.new(1, -35, 0, 10)
-    CloseButton.BackgroundColor3 = Color3.fromRGB(255, 69, 0)
-    CloseButton.BorderSizePixel = 0
-    CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CloseButton.TextScaled = true
-    CloseButton.Font = Enum.Font.SourceSansBold
-    CloseButton.MouseButton1Click:Connect(function()
-        ScreenGui:Destroy()
-    end)
-
-    local players = game.Players:GetPlayers()
-    for i, player in ipairs(players) do
-        local button = Instance.new("TextButton")
-        button.Parent = Frame
-        button.Text = "Ban " .. player.Name
-        button.Size = UDim2.new(1, -10, 0, 40)
-        button.Position = UDim2.new(0, 5, 0, 60 + (i-1) * 50)
-        button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        button.BorderSizePixel = 0
-        button.TextColor3 = Color3.fromRGB(255, 255, 255)
-        button.TextScaled = true
-        button.Font = Enum.Font.SourceSans
-        button.MouseButton1Click:Connect(function()
-            banPlayer(player.Name)
-        end)
-    end
-end
-
+-- Create Menu
 local function createMenu()
     local ScreenGui = Instance.new("ScreenGui")
     local Frame = Instance.new("ScrollingFrame")
@@ -136,15 +79,10 @@ local function createMenu()
     local SpeedTextBox = Instance.new("TextBox")
     local JumpTextBox = Instance.new("TextBox")
     local SizeTextBox = Instance.new("TextBox")
-    local MinimizeButton = Instance.new("TextButton")
-    local CloseButton = Instance.new("TextButton")
+    local ActionButton = Instance.new("TextButton")
     local FlyButton = Instance.new("TextButton")
     local UnflyButton = Instance.new("TextButton")
-    local BanButton = Instance.new("TextButton")
-    local KickButton = Instance.new("TextButton")
-    local SpeedButton = Instance.new("TextButton")
-    local JumpPowerButton = Instance.new("TextButton")
-    local SizeButton = Instance.new("TextButton")
+    local CloseButton = Instance.new("TextButton")
 
     ScreenGui.Name = "MenuGui"
     ScreenGui.Parent = game.CoreGui
@@ -196,4 +134,67 @@ local function createMenu()
     JumpTextBox.BorderSizePixel = 0
     JumpTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     JumpTextBox.TextScaled = true
-    JumpTextBox.Font =
+    JumpTextBox.Font = Enum.Font.SourceSans
+
+    SizeTextBox.Parent = Frame
+    SizeTextBox.PlaceholderText = "Enter Size Value"
+    SizeTextBox.Size = UDim2.new(1, -20, 0, 40)
+    SizeTextBox.Position = UDim2.new(0, 10, 0, 210)
+    SizeTextBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    SizeTextBox.BorderSizePixel = 0
+    SizeTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    SizeTextBox.TextScaled = true
+    SizeTextBox.Font = Enum.Font.SourceSans
+
+    ActionButton.Parent = Frame
+    ActionButton.Text = "Ban Player"
+    ActionButton.Size = UDim2.new(1, -20, 0, 40)
+    ActionButton.Position = UDim2.new(0, 10, 0, 260)
+    ActionButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    ActionButton.BorderSizePixel = 0
+    ActionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ActionButton.TextScaled = true
+    ActionButton.Font = Enum.Font.SourceSans
+    ActionButton.MouseButton1Click:Connect(function()
+        local playerName = PlayerTextBox.Text
+        banPlayer(playerName)
+    end)
+
+    FlyButton.Parent = Frame
+    FlyButton.Text = "Fly Player"
+    FlyButton.Size = UDim2.new(1, -20, 0, 40)
+    FlyButton.Position = UDim2.new(0, 10, 0, 310)
+    FlyButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    FlyButton.BorderSizePixel = 0
+    FlyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    FlyButton.TextScaled = true
+    FlyButton.Font = Enum.Font.SourceSans
+    FlyButton.MouseButton1Click:Connect(function()
+        local player = game.Players:FindFirstChild(PlayerTextBox.Text)
+        if player then
+            flyPlayer(player)
+        end
+    end)
+
+    UnflyButton.Parent = Frame
+    UnflyButton.Text = "Unfly Player"
+    UnflyButton.Size = UDim2.new(1, -20, 0, 40)
+    UnflyButton.Position = UDim2.new(0, 10, 0, 360)
+    UnflyButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    UnflyButton.BorderSizePixel = 0
+    UnflyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    UnflyButton.TextScaled = true
+    UnflyButton.Font = Enum.Font.SourceSans
+    UnflyButton.MouseButton1Click:Connect(function()
+        local player = game.Players:FindFirstChild(PlayerTextBox.Text)
+        if player then
+            unflyPlayer(player)
+        end
+    end)
+
+    CloseButton.Parent = Frame
+    CloseButton.Text = "X"
+    CloseButton.Size = UDim2.new(0, 30, 0, 30)
+    CloseButton.Position = UDim2.new(1, -35, 0, 10)
+    CloseButton.BackgroundColor3 = Color3.fromRGB(255, 69, 0)
+    Close
