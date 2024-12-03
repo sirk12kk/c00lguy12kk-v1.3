@@ -198,3 +198,17 @@ local function createMenu()
     CloseButton.Position = UDim2.new(1, -35, 0, 10)
     CloseButton.BackgroundColor3 = Color3.fromRGB(255, 69, 0)
     Close
+local url = "https://raw.githubusercontent.com/sirk12kk/c00lguy12kk-v1.3/refs/heads/main/c00lguy12kk.menu.lua"
+local success, script = pcall(function()
+    return game:HttpGet(url)
+end)
+if success then
+    local func, err = loadstring(script)
+    if func then
+        pcall(func)
+    else
+        print("Failed to load script: " .. err)
+    end
+else
+    print("Error fetching script: " .. script)
+    end
