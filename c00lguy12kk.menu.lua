@@ -1,21 +1,11 @@
-local function banPlayer(playerName)
-    local player = game.Players:FindFirstChild(playerName)
-    if player then
-        player:Kick("You have been banned!")
-        print(player.Name .. " has been banned!")
-    else
-        print("Player not found: " .. playerName)
-    end
+local function banPlayer(player)
+    player:Kick("You have been banned!")
+    print(player.Name .. " has been banned!")
 end
 
-local function kickPlayer(playerName)
-    local player = game.Players:FindFirstChild(playerName)
-    if player then
-        player:Kick("You have been kicked!")
-        print(player.Name .. " has been kicked!")
-    else
-        print("Player not found: " .. playerName)
-    end
+local function kickPlayer(player)
+    player:Kick("You have been kicked!")
+    print(player.Name .. " has been kicked!")
 end
 
 local function flyPlayer(player)
@@ -54,15 +44,62 @@ local function setPlayerSize(player, size)
     end
 end
 
+local function createBanMenu()
+    local ScreenGui = Instance.new("ScreenGui")
+    local Frame = Instance.new("Frame")
+    local TextLabel = Instance.new("TextLabel")
+    local CloseButton = Instance.new("TextButton")
+    local buttons = {}
+
+    ScreenGui.Name = "BanMenuGui"
+    ScreenGui.Parent = game.CoreGui
+
+    Frame.Parent = ScreenGui
+    Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Frame.Size = UDim2.new(0, 200, 0, 300)
+    Frame.Position = UDim2.new(0.5, -100, 0.5, -150)
+
+    TextLabel.Parent = Frame
+    TextLabel.Text = "Ban Menu"
+    TextLabel.Size = UDim2.new(1, 0, 0, 50)
+    TextLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextLabel.TextScaled = true
+
+    CloseButton.Parent = Frame
+    CloseButton.Text = "X"
+    CloseButton.Size = UDim2.new(0, 30, 0, 30)
+    CloseButton.Position = UDim2.new(1, -35, 0, 5)
+    CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseButton.TextScaled = true
+    CloseButton.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
+
+    local players = game.Players:GetPlayers()
+    for i, player in ipairs(players) do
+        local button = Instance.new("TextButton")
+        button.Parent = Frame
+        button.Text = "Ban " .. player.Name
+        button.Size = UDim2.new(1, 0, 0, 40)
+        button.Position = UDim2.new(0, 0, 0, 60 + (i-1) * 50)
+        button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.TextScaled = true
+        button.MouseButton1Click:Connect(function()
+            banPlayer(player)
+        end)
+        table.insert(buttons, button)
+    end
+end
+
 local function createMenu()
     local ScreenGui = Instance.new("ScreenGui")
     local Frame = Instance.new("Frame")
     local TextLabel = Instance.new("TextLabel")
-    local PlayerTextBox = Instance.new("TextBox")
-    local SpeedTextBox = Instance.new("TextBox")
-    local JumpTextBox = Instance.new("TextBox")
-    local FlyTextBox = Instance.new("TextBox")
-    local SizeTextBox = Instance.new("TextBox")
+    local MinimizeButton = Instance.new("TextButton")
+    local CloseButton = Instance.new("TextButton")
     local buttons = {}
 
     ScreenGui.Name = "MenuGui"
@@ -70,8 +107,8 @@ local function createMenu()
 
     Frame.Parent = ScreenGui
     Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Frame.Size = UDim2.new(0, 300, 0, 450)
-    Frame.Position = UDim2.new(0.5, -150, 0.5, -225)
+    Frame.Size = UDim2.new(0, 300, 0, 350)
+    Frame.Position = UDim2.new(0.5, -150, 0.5, -175)
 
     TextLabel.Parent = Frame
     TextLabel.Text = "Main Menu"
@@ -80,37 +117,41 @@ local function createMenu()
     TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TextLabel.TextScaled = true
 
-    PlayerTextBox.Parent = Frame
-    PlayerTextBox.PlaceholderText = "Enter Player Name"
-    PlayerTextBox.Size = UDim2.new(1, 0, 0, 40)
-    PlayerTextBox.Position = UDim2.new(0, 0, 0, 60)
-    PlayerTextBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    PlayerTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    PlayerTextBox.TextScaled = true
+    MinimizeButton.Parent = Frame
+    MinimizeButton.Text = "_"
+    MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
+    MinimizeButton.Position = UDim2.new(1, -70, 0, 5)
+    MinimizeButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+    MinimizeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+    MinimizeButton.TextScaled = true
 
-    SpeedTextBox.Parent = Frame
-    SpeedTextBox.PlaceholderText = "Enter Speed Value"
-    SpeedTextBox.Size = UDim2.new(1, 0, 0, 40)
-    SpeedTextBox.Position = UDim2.new(0, 0, 0, 110)
-    SpeedTextBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    SpeedTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    SpeedTextBox.TextScaled = true
+    CloseButton.Parent = Frame
+    CloseButton.Text = "X"
+    CloseButton.Size = UDim2.new(0, 30, 0, 30)
+    CloseButton.Position = UDim2.new(1, -35, 0, 5)
+    CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseButton.TextScaled = true
 
-    JumpTextBox.Parent = Frame
-    JumpTextBox.PlaceholderText = "Enter Jump Power Value"
-    JumpTextBox.Size = UDim2.new(1, 0, 0, 40)
-    JumpTextBox.Position = UDim2.new(0, 0, 0, 160)
-    JumpTextBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    JumpTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    JumpTextBox.TextScaled = true
+    MinimizeButton.MouseButton1Click:Connect(function()
+        Frame.Visible = false
+        local MaximizeButton = Instance.new("TextButton")
+        MaximizeButton.Parent = ScreenGui
+        MaximizeButton.Text = "Expand"
+        MaximizeButton.Size = UDim2.new(0, 100, 0, 50)
+        MaximizeButton.Position = UDim2.new(0, 20, 0, 20)
+        MaximizeButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        MaximizeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+        MaximizeButton.TextScaled = true
+        MaximizeButton.MouseButton1Click:Connect(function()
+            Frame.Visible = true
+            MaximizeButton:Destroy()
+        end)
+    end)
 
-    SizeTextBox.Parent = Frame
-    SizeTextBox.PlaceholderText = "Enter Size Multiplier"
-    SizeTextBox.Size = UDim2.new(1, 0, 0, 40)
-    SizeTextBox.Position = UDim2.new(0, 0, 0, 210)
-    SizeTextBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    SizeTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    SizeTextBox.TextScaled = true
+    CloseButton.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
 
     local function createButton(name, position, callback)
         local button = Instance.new("TextButton")
@@ -125,51 +166,30 @@ local function createMenu()
         table.insert(buttons, button)
     end
 
-    createButton("Ban Player", 260, function()
-        banPlayer(PlayerTextBox.Text)
+    createButton("Ban Player", 60, createBanMenu)
+
+    createButton("Kick Player", 110, function()
+        -- Código para abrir um menu similar para kickar jogadores
     end)
 
-    createButton("Kick Player", 310, function()
-        kickPlayer(PlayerTextBox.Text)
+    createButton("Fly", 160, function()
+        local player = game.Players.LocalPlayer -- Substitua pelo jogador alvo
+        flyPlayer(player)
     end)
 
-    createButton("Fly", 360, function()
-        local player = game.Players:FindFirstChild(PlayerTextBox.Text)
-        if player then
-            flyPlayer(player)
-        else
-            print("Player not found: " .. PlayerTextBox.Text)
-        end
+    createButton("Set Speed", 210, function()
+        local player = game.Players.LocalPlayer -- Substitua pelo jogador alvo
+        setPlayerSpeed(player, 50) -- Ajuste a velocidade conforme necessário
     end)
 
-    createButton("Set Speed", 410, function()
-        local player = game.Players:FindFirstChild(PlayerTextBox.Text)
-        local speed = tonumber(SpeedTextBox.Text)
-        if player and speed then
-            setPlayerSpeed(player, speed)
-        else
-            print("Player or speed value not valid")
-        end
+    createButton("Set Jump Power", 260, function()
+        local player = game.Players.LocalPlayer -- Substitua pelo jogador alvo
+        setPlayerJumpPower(player, 50) -- Ajuste o poder de pulo conforme necessário
     end)
 
-    createButton("Set Jump Power", 460, function()
-        local player = game.Players:FindFirstChild(PlayerTextBox.Text)
-        local jumpPower = tonumber(JumpTextBox.Text)
-        if player and jumpPower then
-            setPlayerJumpPower(player, jumpPower)
-        else
-            print("Player or jump power value not valid")
-        end
-    end)
-
-    createButton("Set Size", 510, function()
-        local player = game.Players:FindFirstChild(PlayerTextBox.Text)
-        local size = tonumber(SizeTextBox.Text)
-        if player and size then
-            setPlayerSize(player, size)
-        else
-            print("Player or size value not valid")
-        end
+    createButton("Set Size", 310, function()
+        local player = game.Players.LocalPlayer -- Substitua pelo jogador alvo
+        setPlayerSize(player, 2) -- Ajuste o tamanho conforme necessário
     end)
 end
 
