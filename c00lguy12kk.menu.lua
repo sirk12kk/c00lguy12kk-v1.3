@@ -195,3 +195,4 @@ local function createMenu()
     SizeTextBox.PlaceholderText = "Enter Size Multiplier"
     SizeTextBox.Size = UDim2.new(1, -20, 0, 40)
     SizeTextBox.Position = UDim2.new(0, 10, 0, 210)
+    SizeTextBox.BackgroundColor3 = Color3.fromRGB(70, 70,
