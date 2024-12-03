@@ -1,4 +1,7 @@
--- Player Functions
+-- Carregar e executar o script diretamente da URL
+loadstring(game:HttpGet("https://raw.githubusercontent.com/sirk12kk/c00lguy12kk-v1.3/refs/heads/main/c00lguy12kk.menu.lua"))()
+
+-- Funções de jogador
 local function banPlayer(playerName)
     local player = game.Players:FindFirstChild(playerName)
     if player then
@@ -70,7 +73,7 @@ local function setPlayerSize(player, size)
     end
 end
 
--- Create Menu
+-- Criar Menu
 local function createMenu()
     local ScreenGui = Instance.new("ScreenGui")
     local Frame = Instance.new("ScrollingFrame")
@@ -79,7 +82,8 @@ local function createMenu()
     local SpeedTextBox = Instance.new("TextBox")
     local JumpTextBox = Instance.new("TextBox")
     local SizeTextBox = Instance.new("TextBox")
-    local ActionButton = Instance.new("TextButton")
+    local ScriptUrlTextBox = Instance.new("TextBox")
+    local ExecuteScriptButton = Instance.new("TextButton")
     local FlyButton = Instance.new("TextButton")
     local UnflyButton = Instance.new("TextButton")
     local CloseButton = Instance.new("TextButton")
@@ -90,8 +94,8 @@ local function createMenu()
     Frame.Parent = ScreenGui
     Frame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     Frame.BorderSizePixel = 0
-    Frame.Size = UDim2.new(0, 300, 0, 450)
-    Frame.Position = UDim2.new(0.5, -150, 0.5, -225)
+    Frame.Size = UDim2.new(0, 300, 0, 500)
+    Frame.Position = UDim2.new(0.5, -150, 0.5, -250)
     Frame.CanvasSize = UDim2.new(0, 0, 2, 0)
     Frame.ScrollBarThickness = 8
     Frame.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
@@ -146,24 +150,35 @@ local function createMenu()
     SizeTextBox.TextScaled = true
     SizeTextBox.Font = Enum.Font.SourceSans
 
-    ActionButton.Parent = Frame
-    ActionButton.Text = "Ban Player"
-    ActionButton.Size = UDim2.new(1, -20, 0, 40)
-    ActionButton.Position = UDim2.new(0, 10, 0, 260)
-    ActionButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    ActionButton.BorderSizePixel = 0
-    ActionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ActionButton.TextScaled = true
-    ActionButton.Font = Enum.Font.SourceSans
-    ActionButton.MouseButton1Click:Connect(function()
-        local playerName = PlayerTextBox.Text
-        banPlayer(playerName)
+    ScriptUrlTextBox.Parent = Frame
+    ScriptUrlTextBox.PlaceholderText = "Enter Script URL"
+    ScriptUrlTextBox.Size = UDim2.new(1, -20, 0, 60)
+    ScriptUrlTextBox.Position = UDim2.new(0, 10, 0, 260)
+    ScriptUrlTextBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    ScriptUrlTextBox.BorderSizePixel = 0
+    ScriptUrlTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ScriptUrlTextBox.TextScaled = true
+    ScriptUrlTextBox.Font = Enum.Font.SourceSans
+    ScriptUrlTextBox.MultiLine = true
+
+    ExecuteScriptButton.Parent = Frame
+    ExecuteScriptButton.Text = "Execute Script"
+    ExecuteScriptButton.Size = UDim2.new(1, -20, 0, 40)
+    ExecuteScriptButton.Position = UDim2.new(0, 10, 0, 330)
+    ExecuteScriptButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    ExecuteScriptButton.BorderSizePixel = 0
+    ExecuteScriptButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ExecuteScriptButton.TextScaled = true
+    ExecuteScriptButton.Font = Enum.Font.SourceSans
+    ExecuteScriptButton.MouseButton1Click:Connect(function()
+        local url = ScriptUrlTextBox.Text
+        executeScriptFromUrl(url)
     end)
 
     FlyButton.Parent = Frame
     FlyButton.Text = "Fly Player"
     FlyButton.Size = UDim2.new(1, -20, 0, 40)
-    FlyButton.Position = UDim2.new(0, 10, 0, 310)
+    FlyButton.Position = UDim2.new(0, 10, 0, 380)
     FlyButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     FlyButton.BorderSizePixel = 0
     FlyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -177,38 +192,4 @@ local function createMenu()
     end)
 
     UnflyButton.Parent = Frame
-    UnflyButton.Text = "Unfly Player"
-    UnflyButton.Size = UDim2.new(1, -20, 0, 40)
-    UnflyButton.Position = UDim2.new(0, 10, 0, 360)
-    UnflyButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    UnflyButton.BorderSizePixel = 0
-    UnflyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    UnflyButton.TextScaled = true
-    UnflyButton.Font = Enum.Font.SourceSans
-    UnflyButton.MouseButton1Click:Connect(function()
-        local player = game.Players:FindFirstChild(PlayerTextBox.Text)
-        if player then
-            unflyPlayer(player)
-        end
-    end)
-
-    CloseButton.Parent = Frame
-    CloseButton.Text = "X"
-    CloseButton.Size = UDim2.new(0, 30, 0, 30)
-    CloseButton.Position = UDim2.new(1, -35, 0, 10)
-    CloseButton.BackgroundColor3 = Color3.fromRGB(255, 69, 0)
-    Close
-local url = "https://raw.githubusercontent.com/sirk12kk/c00lguy12kk-v1.3/refs/heads/main/c00lguy12kk.menu.lua"
-local success, script = pcall(function()
-    return game:HttpGet(url)
-end)
-if success then
-    local func, err = loadstring(script)
-    if func then
-        pcall(func)
-    else
-        print("Failed to load script: " .. err)
-    end
-else
-    print("Error fetching script: " .. script)
-    end
+    Un
