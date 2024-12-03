@@ -1,92 +1,89 @@
--- Player Functions
-local function banPlayer(playerName)
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player.Name:lower() == playerName:lower() then
-            player:Kick("You have been banned!")
-            print(player.Name .. " has been banned!")
-            return
+local Players = game:GetService("Players")
+local DataStoreService = game:GetService("DataStoreService")
+local BanStore = DataStoreService:GetDataStore("BanStore")
+
+-- Function to ban a player
+local function BanPlayer(player)
+    -- Save the player's UserId to the BanStore
+    BanStore:SetAsync(tostring(player.UserId), true)
+    -- Kick the player
+    player:Kick("You have been banned.")
+end
+
+-- Function to unban a player
+local function UnbanPlayer(player)
+    -- Remove the player's UserId from the BanStore
+    BanStore:SetAsync(tostring(player.UserId), nil)
+end
+
+-- Check if a player is banned when they join the game
+Players.PlayerAdded:Connect(function(player)
+    -- Check if the player's UserId is in the BanStore
+    if BanStore:GetAsync(tostring(player.UserId)) then
+        -- If they are banned, kick them
+        player:Kick("You are banned from this game.")
+    else
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:WaitForChild("Humanoid")
+        
+        -- Set initial jump power and walk speed
+        humanoid.JumpPower = 100
+        humanoid.WalkSpeed = 50
+
+        -- Variables for flight control
+        local flying = false
+        local flySpeed = 50
+
+        -- Function to activate flying
+        local function fly()
+            flying = true
+            humanoid.PlatformStand = true -- Prevents the player from falling
+            while flying do
+                character:SetPrimaryPartCFrame(character.PrimaryPart.CFrame + Vector3.new(0, flySpeed * 0.1, 0)) -- Move up
+                wait(0.1) -- Wait a bit before continuing
+            end
         end
+
+        -- Function to deactivate flying
+        local function unfly()
+            flying = false
+            humanoid.PlatformStand = false -- Allows the player to fall again
+        end
+
+        -- Function to set speed
+        local function setSpeed(speed)
+            humanoid.WalkSpeed = speed
+            print(player.Name .. " walk speed set to " .. humanoid.WalkSpeed)
+        end
+
+        -- Function to set size
+        local function setSize(size)
+            character:Resize(size) -- Adjust the size of the character
+            print(player.Name .. " size set to " .. tostring(size))
+        end
+
+        -- Example usage of functions
+        setSpeed(100) -- Set initial speed to 100
+        setSize(Vector3.new(1, 1, 1)) -- Set initial size to normal
+
+        -- Activate flying after 5 seconds (for testing)
+        wait(5)
+        fly()
+
+        -- Deactivate flying after 10 seconds (for testing)
+        wait(10)
+        unfly()
     end
-    warn("Player not found: " .. playerName)
+end)
+
+-- Example usage: Ban a player (replace "PlayerName" with the actual player's name)
+local playerToBan = Players:FindFirstChild("PlayerName")
+if playerToBan then
+    BanPlayer(playerToBan)
 end
 
-local function kickPlayer(playerName)
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player.Name:lower() == playerName:lower() then
-            player:Kick("You have been kicked!")
-            print(player.Name .. " has been kicked!")
-            return
-        end
-    end
-    warn("Player not found: " .. playerName)
+-- Example usage: Unban a player (replace "PlayerName" with the actual player's name)
+local playerToUnban = Players:FindFirstChild("PlayerName")
+if playerToUnban then
+    UnbanPlayer(playerToUnban)
 end
-
--- Create Menu
-local function createMenu()
-    local ScreenGui = Instance.new("ScreenGui")
-    local Frame = Instance.new("Frame")
-    local PlayerTextBox = Instance.new("TextBox")
-    local BanButton = Instance.new("TextButton")
-    local KickButton = Instance.new("TextButton")
-    local CloseButton = Instance.new("TextButton")
-
-    ScreenGui.Name = "MenuGui"
-    ScreenGui.Parent = game.CoreGui
-
-    Frame.Parent = ScreenGui
-    Frame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    Frame.BorderSizePixel = 0
-    Frame.Size = UDim2.new(0, 300, 0, 200)
-    Frame.Position = UDim2.new(0.5, -150, 0.5, -100)
-
-    PlayerTextBox.Parent = Frame
-    PlayerTextBox.Size = UDim2.new(0, 280, 0, 50)
-    PlayerTextBox.Position = UDim2.new(0, 10, 0, 10)
-    PlayerTextBox.PlaceholderText = "Enter player name"
-
-    BanButton.Parent = Frame
-    BanButton.Size = UDim2.new(0, 130, 0, 50)
-    BanButton.Position = UDim2.new(0, 10, 0, 70)
-    BanButton.Text = "Ban Player"
-    BanButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-
-    KickButton.Parent = Frame
-    KickButton.Size = UDim2.new(0, 130, 0, 50)
-    KickButton.Position = UDim2.new(0, 150, 0, 70)
-    KickButton.Text = "Kick Player"
-    KickButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
-
-    CloseButton.Parent = Frame
-    CloseButton.Size = UDim2.new(0, 280, 0, 50)
-    CloseButton.Position = UDim2.new(0, 10, 0, 130)
-    CloseButton.Text = "Close"
-    CloseButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-
-    -- Ban Button Functionality
-    BanButton.MouseButton1Click:Connect(function()
-        local playerName = PlayerTextBox.Text
-        if playerName and playerName ~= "" then
-            banPlayer(playerName)
-        else
-            warn("Please enter a valid player name.")
-        end
-    end)
-
-    -- Kick Button Functionality
-    KickButton.MouseButton1Click:Connect(function()
-        local playerName = PlayerTextBox.Text
-        if playerName and playerName ~= "" then
-            kickPlayer(playerName)
-        else
-            warn("Please enter a valid player name.")
-        end
-    end)
-
-    -- Close Button Functionality
-    CloseButton.MouseButton1Click:Connect(function()
-        ScreenGui:Destroy()
-    end)
-end
-
--- Create the menu when the script runs
-createMenu()
