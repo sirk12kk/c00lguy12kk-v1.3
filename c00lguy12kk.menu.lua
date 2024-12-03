@@ -138,6 +138,13 @@ local function createMenu()
     local SizeTextBox = Instance.new("TextBox")
     local MinimizeButton = Instance.new("TextButton")
     local CloseButton = Instance.new("TextButton")
+    local FlyButton = Instance.new("TextButton")
+    local UnflyButton = Instance.new("TextButton")
+    local BanButton = Instance.new("TextButton")
+    local KickButton = Instance.new("TextButton")
+    local SpeedButton = Instance.new("TextButton")
+    local JumpPowerButton = Instance.new("TextButton")
+    local SizeButton = Instance.new("TextButton")
 
     ScreenGui.Name = "MenuGui"
     ScreenGui.Parent = game.CoreGui
@@ -189,10 +196,4 @@ local function createMenu()
     JumpTextBox.BorderSizePixel = 0
     JumpTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     JumpTextBox.TextScaled = true
-    JumpTextBox.Font = Enum.Font.SourceSans
-
-    SizeTextBox.Parent = Frame
-    SizeTextBox.PlaceholderText = "Enter Size Multiplier"
-    SizeTextBox.Size = UDim2.new(1, -20, 0, 40)
-    SizeTextBox.Position = UDim2.new(0, 10, 0, 210)
-    SizeTextBox.BackgroundColor3 = Color3.fromRGB(70, 70,
+    JumpTextBox.Font =
